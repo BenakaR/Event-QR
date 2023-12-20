@@ -25,6 +25,22 @@ qrcode.callback = (res) => {
     }
   };
 
+function tick() {
+    canvasElement.height = video.videoHeight;
+    canvasElement.width = video.videoWidth;
+    canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+  
+    scanning && requestAnimationFrame(tick);
+  }
+
+function scan() {
+  try {
+    qrcode.decode();
+  } catch (e) {
+    setTimeout(scan, 300);
+  }
+}
+
 btnScanQR.onclick = () =>{
   navigator.mediaDevices
     .getUserMedia({ video: { facingMode: "environment" } })
@@ -41,18 +57,3 @@ btnScanQR.onclick = () =>{
     });
 };
 
-function tick() {
-    canvasElement.height = video.videoHeight;
-    canvasElement.width = video.videoWidth;
-    canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-  
-    scanning && requestAnimationFrame(tick);
-  }
-
-function scan() {
-  try {
-    qrcode.decode();
-  } catch (e) {
-    setTimeout(scan, 300);
-  }
-}
